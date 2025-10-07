@@ -29,4 +29,4 @@ setInterval(() => {
   counter++;
   counterDisplay.textContent = `${counter} honeycombs`;
   console.log(`Auto increment: ${counter}`);
-}, 1000); //auto click every 1 seconds 
+}, 1000); //auto click every 1 seconds

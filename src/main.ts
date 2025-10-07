@@ -24,9 +24,16 @@ button.addEventListener("click", () => {
   console.log(`Button clicked! Total: ${counter}`);
 });
 
-//Automatic Clicking!
-setInterval(() => {
-  counter++;
-  counterDisplay.textContent = `${counter} honeycombs`;
-  console.log(`Auto increment: ${counter}`);
-}, 1000); //auto click every 1 seconds
+//growth with requestAnimationFrame
+let lastTime = performance.now();
+
+function update(currentTime: number) {
+  const deltaTime = (currentTime - lastTime) / 1000;
+  lastTime = currentTime;
+  counter += deltaTime * 1;
+  counterDisplay.textContent = `${counter.toFixed(2)} honeycombs`;
+
+  requestAnimationFrame(update);
+}
+
+requestAnimationFrame(update);

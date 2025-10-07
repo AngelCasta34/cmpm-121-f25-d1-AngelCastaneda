@@ -24,7 +24,7 @@ button.addEventListener("click", () => {
   console.log(`Button clicked! Total: ${counter}`);
 });
 
-//Automatic Clicking
+//Automatic Clicking!
 setInterval(() => {
   counter++;
   counterDisplay.textContent = `${counter} honeycombs`;

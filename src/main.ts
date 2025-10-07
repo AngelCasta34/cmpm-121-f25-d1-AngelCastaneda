@@ -17,8 +17,16 @@ document.body.appendChild(title);
 document.body.appendChild(counterDisplay);
 document.body.appendChild(button);
 
+//Click
 button.addEventListener("click", () => {
   counter++;
   counterDisplay.textContent = `${counter} honeycombs`;
   console.log(`Button clicked! Total: ${counter}`);
 });
+
+//Automatic Clicking
+setInterval(() => {
+  counter++;
+  counterDisplay.textContent = `${counter} honeycombs`;
+  console.log(`Auto increment: ${counter}`);
+}, 1000); //auto click every 1 seconds 

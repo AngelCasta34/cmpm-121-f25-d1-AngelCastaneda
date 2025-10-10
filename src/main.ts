@@ -36,7 +36,7 @@ const clickButton = document.createElement("button");
 const beeImage = document.createElement("img");
 beeImage.src = beeImageUrl;
 beeImage.alt = "Bee collecting nectar";
-beeImage.classList.add("bee-icon"); // optional CSS styling
+beeImage.classList.add("bee-icon");
 clickButton.appendChild(beeImage);
 
 //upgrades

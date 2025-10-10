@@ -1,7 +1,13 @@
+import beeImageUrl from "./bee.png";
 import "./style.css";
 
+//title
 const title = document.createElement("h1");
-title.textContent = "Incremental Game CMPM-121";
+title.textContent = " 🐝 The Bee Empire 🐝 ";
+
+const subtitle = document.createElement("p");
+subtitle.textContent =
+  "Grow your buzzing hive, gather nectar, and build a honey empire.";
 
 //upgrade type definition
 interface Upgrade {
@@ -27,12 +33,16 @@ rateDisplay.textContent = `Growth rate: ${
 
 //click
 const clickButton = document.createElement("button");
-clickButton.textContent = "🐝 Collect 🐝";
+const beeImage = document.createElement("img");
+beeImage.src = beeImageUrl;
+beeImage.alt = "Bee collecting nectar";
+beeImage.classList.add("bee-icon"); // optional CSS styling
+clickButton.appendChild(beeImage);
 
 //upgrades
 const upgrades: Upgrade[] = [
-  { label: "Worker Bee", cost: 10, effect: 0.1, owned: 0 },
-  { label: "Beehive", cost: 100, effect: 2.0, owned: 0 },
+  { label: "Forager Bee", cost: 10, effect: 0.1, owned: 0 },
+  { label: "Honeycomb Farm", cost: 100, effect: 2.0, owned: 0 },
   { label: "Queen Bee", cost: 1000, effect: 50.0, owned: 0 },
 ];
 

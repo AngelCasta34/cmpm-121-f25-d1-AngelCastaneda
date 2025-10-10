@@ -3,65 +3,114 @@ import "./style.css";
 const title = document.createElement("h1");
 title.textContent = "Incremental Game CMPM-121";
 
+//upgrade type definition
+interface Upgrade {
+  label: string;
+  cost: number;
+  effect: number;
+  owned: number;
+  button?: HTMLButtonElement;
+  status?: HTMLDivElement;
+}
+
 //counter
 let counter: number = 0;
 const counterDisplay = document.createElement("div");
 counterDisplay.textContent = `${counter.toFixed(2)} honeycombs`;
 
-// Growth rate
+//growth rate
 let growthRate: number = 0;
+const rateDisplay = document.createElement("div");
+rateDisplay.textContent = `Growth rate: ${
+  growthRate.toFixed(2)
+} honeycombs/sec`;
 
-//button
+//click
 const clickButton = document.createElement("button");
-clickButton.textContent = "🐝";
+clickButton.textContent = "🐝 Collect 🐝";
 
-const upgradeButton = document.createElement("button");
-upgradeButton.textContent = " 🐝 Buy Worker Bee 🐝 (10 honeycombs)";
-upgradeButton.disabled = true;
+//upgrades
+const upgrades: Upgrade[] = [
+  { label: "Worker Bee", cost: 10, effect: 0.1, owned: 0 },
+  { label: "Beehive", cost: 100, effect: 2.0, owned: 0 },
+  { label: "Queen Bee", cost: 1000, effect: 50.0, owned: 0 },
+];
 
-//elements
+//shop container
+const shopContainer = document.createElement("div");
+
+//create upgrade buttons and ownership status
+upgrades.forEach((upgrade) => {
+  // Create button
+  const button = document.createElement("button");
+  button.textContent =
+    `🐝 Buy ${upgrade.label} 🐝 (${upgrade.cost} honeycombs)`;
+  button.disabled = true;
+
+  //purchase logic
+  button.addEventListener("click", () => {
+    if (counter >= upgrade.cost) {
+      counter -= upgrade.cost;
+      growthRate += upgrade.effect;
+      upgrade.owned++;
+      console.log(
+        `Purchased ${upgrade.label}! Growth rate is now ${
+          growthRate.toFixed(2)
+        } honeycombs/sec.`,
+      );
+      updateDisplay();
+    }
+  });
+
+  //ownership display
+  const status = document.createElement("div");
+  status.textContent = `Owned: ${upgrade.owned}`;
+
+  upgrade.button = button;
+  upgrade.status = status;
+
+  shopContainer.appendChild(button);
+  shopContainer.appendChild(status);
+});
+
+//add elements to page
 document.body.appendChild(title);
 document.body.appendChild(counterDisplay);
+document.body.appendChild(rateDisplay);
 document.body.appendChild(clickButton);
-document.body.appendChild(upgradeButton);
+document.body.appendChild(shopContainer);
 
-//Click
 clickButton.addEventListener("click", () => {
   counter++;
   updateDisplay();
 });
 
-// Purchasing upgrade
-upgradeButton.addEventListener("click", () => {
-  if (counter >= 10) {
-    counter -= 10;
-    growthRate += 1;
-    console.log(
-      `Purchased upgrade! Growth rate is now ${growthRate} per second.`,
-    );
-    updateDisplay();
-  }
-});
-
-//growth with requestAnimationFrame
+//continuous growth with requestAnimationFrame
 let lastTime = performance.now();
 
 function update(currentTime: number) {
   const deltaTime = (currentTime - lastTime) / 1000;
   lastTime = currentTime;
-
-  // Increase counter
   counter += deltaTime * growthRate;
-
-  // Update UI
   updateDisplay();
 
   requestAnimationFrame(update);
 }
 
+//update UI and enable/disable upgrades
 function updateDisplay() {
   counterDisplay.textContent = `${counter.toFixed(2)} honeycombs`;
-  upgradeButton.disabled = counter < 10;
+  rateDisplay.textContent = `Growth rate: ${
+    growthRate.toFixed(2)
+  } honeycombs/sec`;
+
+  upgrades.forEach((upgrade) => {
+    if (upgrade.button && upgrade.status) {
+      upgrade.button.disabled = counter < upgrade.cost;
+      upgrade.status.textContent = `Owned: ${upgrade.owned}`;
+    }
+  });
 }
 
+// Start animation
 requestAnimationFrame(update);

@@ -53,6 +53,11 @@ upgrades.forEach((upgrade) => {
       counter -= upgrade.cost;
       growthRate += upgrade.effect;
       upgrade.owned++;
+
+      //price increase after purchase
+      const scale = 1.15;
+      upgrade.cost = upgrade.cost * scale;
+
       console.log(
         `Purchased ${upgrade.label}! Growth rate is now ${
           growthRate.toFixed(2)
@@ -107,6 +112,9 @@ function updateDisplay() {
   upgrades.forEach((upgrade) => {
     if (upgrade.button && upgrade.status) {
       upgrade.button.disabled = counter < upgrade.cost;
+      upgrade.button.textContent = `🐝 Buy ${upgrade.label} 🐝 (${
+        upgrade.cost.toFixed(2)
+      } honeycombs)`;
       upgrade.status.textContent = `Owned: ${upgrade.owned}`;
     }
   });

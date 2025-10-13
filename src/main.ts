@@ -6,17 +6,18 @@ const title = document.createElement("h1");
 title.textContent = " 🐝 The Bee Empire 🐝 ";
 
 const subtitle = document.createElement("p");
-subtitle.textContent =
-  "Grow your buzzing hive, gather nectar, and build a honey empire.";
+subtitle.textContent = "Grow your buzzing hive gather nectar";
 
 //upgrade type definition
 interface Upgrade {
   label: string;
+  description: string;
   cost: number;
   effect: number;
   owned: number;
   button?: HTMLButtonElement;
   status?: HTMLDivElement;
+  descElement?: HTMLParagraphElement;
 }
 
 //counter
@@ -41,9 +42,41 @@ clickButton.appendChild(beeImage);
 
 //upgrades
 const upgrades: Upgrade[] = [
-  { label: "Forager Bee", cost: 10, effect: 0.1, owned: 0 },
-  { label: "Honeycomb Farm", cost: 100, effect: 2.0, owned: 0 },
-  { label: "Queen Bee", cost: 1000, effect: 50.0, owned: 0 },
+  {
+    label: "Forager Bee",
+    description: "Basic worker that gathers nectar from nearby flowers.",
+    cost: 10,
+    effect: 0.1,
+    owned: 0,
+  },
+  {
+    label: "Honeycomb Farm",
+    description: "Organized storage combs to multiply honey output.",
+    cost: 100,
+    effect: 2.0,
+    owned: 0,
+  },
+  {
+    label: "Royal Hive",
+    description: "Central hive that commands all bees to work harder.",
+    cost: 1000,
+    effect: 50.0,
+    owned: 0,
+  },
+  {
+    label: "Wax Factory",
+    description: "Processes excess nectar into wax for upgraded structures.",
+    cost: 5000,
+    effect: 120.0,
+    owned: 0,
+  },
+  {
+    label: "Honey Research Lab",
+    description: "Bee scientists discover new ways to optimize honey flow.",
+    cost: 20000,
+    effect: 500.0,
+    owned: 0,
+  },
 ];
 
 //shop container
@@ -81,15 +114,22 @@ upgrades.forEach((upgrade) => {
   const status = document.createElement("div");
   status.textContent = `Owned: ${upgrade.owned}`;
 
+  const desc = document.createElement("p");
+  desc.textContent = upgrade.description;
+  desc.classList.add("upgrade-description");
+
   upgrade.button = button;
   upgrade.status = status;
+  upgrade.descElement = desc;
 
   shopContainer.appendChild(button);
   shopContainer.appendChild(status);
+  shopContainer.appendChild(desc);
 });
 
 //add elements to page
 document.body.appendChild(title);
+document.body.appendChild(subtitle);
 document.body.appendChild(counterDisplay);
 document.body.appendChild(rateDisplay);
 document.body.appendChild(clickButton);

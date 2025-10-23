@@ -23,8 +23,8 @@ interface Upgrade {
 }
 
 // Core game variables
-let counter: number = 0;
-let growthRate: number = 0;
+let resourceCount: number = 0;
+let resourceGenerationRate: number = 0;
 
 // Upgrade configurations
 const upgrades: Upgrade[] = [
@@ -67,7 +67,7 @@ const upgrades: Upgrade[] = [
 
 /////////////////////////////////////
 // UI ELEMENT CREATION
-// Builds title, counters, bee button, and shop layout
+// Builds title, counters, main button, and shop layout
 /////////////////////////////////////
 
 // Title and subtitle
@@ -77,22 +77,24 @@ title.textContent = " 🐝 The Bee Empire 🐝 ";
 const subtitle = document.createElement("p");
 subtitle.textContent = "Grow your buzzing hive gather nectar";
 
-// Counter and growth display
+// Counter and generation display
 const counterDisplay = document.createElement("div");
-counterDisplay.textContent = `${counter.toFixed(2)} honeycombs`;
+counterDisplay.textContent = `${resourceCount.toFixed(2)} honeycombs`;
 
 const rateDisplay = document.createElement("div");
 rateDisplay.textContent = `Growth rate: ${
-  growthRate.toFixed(2)
+  resourceGenerationRate.toFixed(
+    2,
+  )
 } honeycombs/sec`;
 
-// Main clickable bee button
-const clickButton = document.createElement("button");
+// Main clickable button
+const directActionButton = document.createElement("button");
 const beeImage = document.createElement("img");
 beeImage.src = beeImageUrl;
 beeImage.alt = "Bee collecting nectar";
 beeImage.classList.add("bee-icon");
-clickButton.appendChild(beeImage);
+directActionButton.appendChild(beeImage);
 
 // Shop container
 const shopContainer = document.createElement("div");
@@ -106,9 +108,9 @@ upgrades.forEach((upgrade) => {
 
   // Purchase logic
   button.addEventListener("click", () => {
-    if (counter >= upgrade.cost) {
-      counter -= upgrade.cost;
-      growthRate += upgrade.effect;
+    if (resourceCount >= upgrade.cost) {
+      resourceCount -= upgrade.cost;
+      resourceGenerationRate += upgrade.effect;
       upgrade.owned++;
 
       // Price increase after purchase
@@ -118,6 +120,7 @@ upgrades.forEach((upgrade) => {
     }
   });
 
+  // Ownership and description display
   const status = document.createElement("div");
   status.textContent = `Owned: ${upgrade.owned}`;
 
@@ -142,41 +145,43 @@ document.body.appendChild(title);
 document.body.appendChild(subtitle);
 document.body.appendChild(counterDisplay);
 document.body.appendChild(rateDisplay);
-document.body.appendChild(clickButton);
+document.body.appendChild(directActionButton);
 document.body.appendChild(shopContainer);
 
 /////////////////////////////////////
 // EVENT LISTENERS AND GAME LOGIC
-// Handles click actions and updates displays
+// Handles user clicks and upgrades display updates
 /////////////////////////////////////
-clickButton.addEventListener("click", () => {
-  counter++;
+directActionButton.addEventListener("click", () => {
+  resourceCount++;
   updateDisplay();
 });
 
 /////////////////////////////////////
 // ANIMATION AND UPDATE LOOP
-// Manages continuous honey growth and display refresh
+// Manages automatic honey generation and display refresh
 /////////////////////////////////////
 let lastTime = performance.now();
 
 function update(currentTime: number) {
   const deltaTime = (currentTime - lastTime) / 1000;
   lastTime = currentTime;
-  counter += deltaTime * growthRate;
+  resourceCount += deltaTime * resourceGenerationRate;
   updateDisplay();
   requestAnimationFrame(update);
 }
 
 function updateDisplay() {
-  counterDisplay.textContent = `${counter.toFixed(2)} honeycombs`;
+  counterDisplay.textContent = `${resourceCount.toFixed(2)} honeycombs`;
   rateDisplay.textContent = `Growth rate: ${
-    growthRate.toFixed(2)
+    resourceGenerationRate.toFixed(
+      2,
+    )
   } honeycombs/sec`;
 
   upgrades.forEach((upgrade) => {
     if (upgrade.button && upgrade.status) {
-      upgrade.button.disabled = counter < upgrade.cost;
+      upgrade.button.disabled = resourceCount < upgrade.cost;
       upgrade.button.textContent = `🐝 Buy ${upgrade.label} 🐝 (${
         upgrade.cost.toFixed(
           2,

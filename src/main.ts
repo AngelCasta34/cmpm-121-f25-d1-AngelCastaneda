@@ -10,7 +10,6 @@ import "./style.css";
 // Defines interfaces, core variables, and upgrade configurations
 /////////////////////////////////////
 
-// Interface for upgrade data
 interface Upgrade {
   label: string;
   description: string;
@@ -83,9 +82,7 @@ counterDisplay.textContent = `${resourceCount.toFixed(2)} honeycombs`;
 
 const rateDisplay = document.createElement("div");
 rateDisplay.textContent = `Growth rate: ${
-  resourceGenerationRate.toFixed(
-    2,
-  )
+  resourceGenerationRate.toFixed(2)
 } honeycombs/sec`;
 
 // Main clickable button
@@ -145,6 +142,12 @@ document.body.appendChild(title);
 document.body.appendChild(subtitle);
 document.body.appendChild(counterDisplay);
 document.body.appendChild(rateDisplay);
+
+// Glow effect behind the bee
+const glow = document.createElement("div");
+glow.classList.add("glow");
+document.body.appendChild(glow);
+
 document.body.appendChild(directActionButton);
 document.body.appendChild(shopContainer);
 
@@ -174,18 +177,14 @@ function update(currentTime: number) {
 function updateDisplay() {
   counterDisplay.textContent = `${resourceCount.toFixed(2)} honeycombs`;
   rateDisplay.textContent = `Growth rate: ${
-    resourceGenerationRate.toFixed(
-      2,
-    )
+    resourceGenerationRate.toFixed(2)
   } honeycombs/sec`;
 
   upgrades.forEach((upgrade) => {
     if (upgrade.button && upgrade.status) {
       upgrade.button.disabled = resourceCount < upgrade.cost;
       upgrade.button.textContent = `🐝 Buy ${upgrade.label} 🐝 (${
-        upgrade.cost.toFixed(
-          2,
-        )
+        upgrade.cost.toFixed(2)
       } honeycombs)`;
       upgrade.status.textContent = `Owned: ${upgrade.owned}`;
     }

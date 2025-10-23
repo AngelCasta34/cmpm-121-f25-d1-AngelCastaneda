@@ -6,19 +6,11 @@ import beeImageUrl from "./bee.png";
 import "./style.css";
 
 /////////////////////////////////////
-// TITLE ELEMENT CREATION
-// Creates the main heading and subtitle for the game UI
+// DATA DEFINITIONS
+// Defines interfaces, core variables, and upgrade configurations
 /////////////////////////////////////
-const title = document.createElement("h1");
-title.textContent = " 🐝 The Bee Empire 🐝 ";
 
-const subtitle = document.createElement("p");
-subtitle.textContent = "Grow your buzzing hive gather nectar";
-
-/////////////////////////////////////
-// UPGRADE INTERFACE DEFINITION
-// Defines the data structure for each upgrade type
-/////////////////////////////////////
+// Interface for upgrade data
 interface Upgrade {
   label: string;
   description: string;
@@ -30,40 +22,11 @@ interface Upgrade {
   descElement?: HTMLParagraphElement;
 }
 
-/////////////////////////////////////
-// CORE GAME VARIABLES
-// Tracks honeycomb count and automatic growth rate
-/////////////////////////////////////
+// Core game variables
 let counter: number = 0;
 let growthRate: number = 0;
 
-/////////////////////////////////////
-// DISPLAY ELEMENTS
-// Shows the current honeycomb count and growth rate
-/////////////////////////////////////
-const counterDisplay = document.createElement("div");
-counterDisplay.textContent = `${counter.toFixed(2)} honeycombs`;
-
-const rateDisplay = document.createElement("div");
-rateDisplay.textContent = `Growth rate: ${
-  growthRate.toFixed(2)
-} honeycombs/sec`;
-
-/////////////////////////////////////
-// MAIN CLICKABLE BEE BUTTON
-// Player clicks this button to earn honeycombs manually
-/////////////////////////////////////
-const clickButton = document.createElement("button");
-const beeImage = document.createElement("img");
-beeImage.src = beeImageUrl;
-beeImage.alt = "Bee collecting nectar";
-beeImage.classList.add("bee-icon");
-clickButton.appendChild(beeImage);
-
-/////////////////////////////////////
-// UPGRADE DATA SETUP
-// Defines all available upgrades in the shop
-/////////////////////////////////////
+// Upgrade configurations
 const upgrades: Upgrade[] = [
   {
     label: "Forager Bee",
@@ -103,15 +66,38 @@ const upgrades: Upgrade[] = [
 ];
 
 /////////////////////////////////////
-// SHOP CONTAINER CREATION
-// Holds upgrade buttons, descriptions, and ownership counts
+// UI ELEMENT CREATION
+// Builds title, counters, bee button, and shop layout
 /////////////////////////////////////
+
+// Title and subtitle
+const title = document.createElement("h1");
+title.textContent = " 🐝 The Bee Empire 🐝 ";
+
+const subtitle = document.createElement("p");
+subtitle.textContent = "Grow your buzzing hive gather nectar";
+
+// Counter and growth display
+const counterDisplay = document.createElement("div");
+counterDisplay.textContent = `${counter.toFixed(2)} honeycombs`;
+
+const rateDisplay = document.createElement("div");
+rateDisplay.textContent = `Growth rate: ${
+  growthRate.toFixed(2)
+} honeycombs/sec`;
+
+// Main clickable bee button
+const clickButton = document.createElement("button");
+const beeImage = document.createElement("img");
+beeImage.src = beeImageUrl;
+beeImage.alt = "Bee collecting nectar";
+beeImage.classList.add("bee-icon");
+clickButton.appendChild(beeImage);
+
+// Shop container
 const shopContainer = document.createElement("div");
 
-/////////////////////////////////////
-// UPGRADE BUTTON CREATION AND LOGIC
-// Generates buttons for each upgrade and defines purchase behavior
-/////////////////////////////////////
+// Upgrade button creation
 upgrades.forEach((upgrade) => {
   const button = document.createElement("button");
   button.textContent =
@@ -128,19 +114,10 @@ upgrades.forEach((upgrade) => {
       // Price increase after purchase
       const scale = 1.15;
       upgrade.cost = upgrade.cost * scale;
-
-      console.log(
-        `Purchased ${upgrade.label}! Growth rate is now ${
-          growthRate.toFixed(
-            2,
-          )
-        } honeycombs/sec.`,
-      );
       updateDisplay();
     }
   });
 
-  // Ownership and description display
   const status = document.createElement("div");
   status.textContent = `Owned: ${upgrade.owned}`;
 
@@ -158,8 +135,8 @@ upgrades.forEach((upgrade) => {
 });
 
 /////////////////////////////////////
-// PAGE ELEMENT ASSEMBLY
-// Adds all UI elements to the webpage in display order
+// PAGE ASSEMBLY
+// Adds all UI elements to the document
 /////////////////////////////////////
 document.body.appendChild(title);
 document.body.appendChild(subtitle);
@@ -169,8 +146,8 @@ document.body.appendChild(clickButton);
 document.body.appendChild(shopContainer);
 
 /////////////////////////////////////
-// CLICK HANDLER
-// Increases honeycomb count when player clicks the bee button
+// EVENT LISTENERS AND GAME LOGIC
+// Handles click actions and updates displays
 /////////////////////////////////////
 clickButton.addEventListener("click", () => {
   counter++;
@@ -178,8 +155,8 @@ clickButton.addEventListener("click", () => {
 });
 
 /////////////////////////////////////
-// CONTINUOUS GROWTH SYSTEM
-// Uses requestAnimationFrame to update automatic honey production
+// ANIMATION AND UPDATE LOOP
+// Manages continuous honey growth and display refresh
 /////////////////////////////////////
 let lastTime = performance.now();
 
@@ -191,16 +168,10 @@ function update(currentTime: number) {
   requestAnimationFrame(update);
 }
 
-/////////////////////////////////////
-// DISPLAY UPDATE FUNCTION
-// Refreshes honeycomb count, growth rate, and upgrade button states
-/////////////////////////////////////
 function updateDisplay() {
   counterDisplay.textContent = `${counter.toFixed(2)} honeycombs`;
   rateDisplay.textContent = `Growth rate: ${
-    growthRate.toFixed(
-      2,
-    )
+    growthRate.toFixed(2)
   } honeycombs/sec`;
 
   upgrades.forEach((upgrade) => {
@@ -216,8 +187,4 @@ function updateDisplay() {
   });
 }
 
-/////////////////////////////////////
-// GAME LOOP START
-// Begins continuous animation and production tracking
-/////////////////////////////////////
 requestAnimationFrame(update);
